@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql:atf
+    username: atf
+    password: atf
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+          batch_size: 50
+        dialect: org.hibernate.dialect.PostgreSQLDialect
