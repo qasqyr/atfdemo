@@ -5,4 +5,5 @@ public class UserDto {
     public String firstName;
     public String lastName;
     public String patronymicName;
+    public Boolean deleted;
 }

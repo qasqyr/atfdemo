@@ -21,4 +21,15 @@ public class UserService {
     public User save(User user) {
         return userRepository.save(user);
     }
+
+    public User getUserById(Long userId) throws Exception {
+        return userRepository.findById(userId).get();
+    }
+
+    public User deleteUserById(Long userId) throws Exception {
+        User user = userRepository.findById(userId).get();
+        user.setDeleted(true);
+        userRepository.save(user);
+        return user;
+    }
 }

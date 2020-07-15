@@ -5,4 +5,5 @@ public class ContactDto {
     public String phoneNumber;
     public String type;
     public Long userId;
+    public Boolean deleted;
 }

@@ -15,6 +15,8 @@ public class User {
     private String lastName;
     @Column(name = "patronymic_name")
     private String patronymicName;
+    @Column(name = "deleted")
+    private Boolean deleted = false;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Contact> contacts;
 
@@ -50,6 +52,14 @@ public class User {
         this.patronymicName = patronymicName;
     }
 
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
     public List<Contact> getContacts() {
         return contacts;
     }
@@ -57,4 +67,5 @@ public class User {
     public void setContacts(List<Contact> contacts) {
         this.contacts = contacts;
     }
+
 }

@@ -17,4 +17,19 @@ public class ContactService {
     public List<Contact> getAllContactsByUserId(Long userId) {
         return contactRepository.findAllByUserId(userId);
     }
+
+    public Contact getContactById(Long contactId) throws Exception {
+        return contactRepository.findById(contactId).get();
+    }
+
+    public Contact save(Contact contact) {
+        return contactRepository.save(contact);
+    }
+
+    public Contact deleteContactById(Long contactId) throws Exception {
+        Contact contact = contactRepository.findById(contactId).get();
+        contact.setDeleted(true);
+        contactRepository.save(contact);
+        return contact;
+    }
 }

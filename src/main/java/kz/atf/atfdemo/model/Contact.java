@@ -15,6 +15,8 @@ public class Contact {
     @Column(name = "type")
     @Enumerated(value = EnumType.STRING)
     private Type type;
+    @Column(name = "deleted")
+    private Boolean deleted = false;
     @ManyToOne
     private User user;
 
@@ -44,6 +46,14 @@ public class Contact {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 
     public User getUser() {

@@ -6,14 +6,17 @@ import kz.atf.atfdemo.mapper.ContactMapper;
 import kz.atf.atfdemo.mapper.UserMapper;
 import kz.atf.atfdemo.model.Contact;
 import kz.atf.atfdemo.model.User;
+import kz.atf.atfdemo.response.ListResponse;
 import kz.atf.atfdemo.service.ContactService;
 import kz.atf.atfdemo.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
     private UserService userService;
     private UserMapper userMapper;
@@ -28,21 +31,45 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public List<UserDto> getAllUsers() {
+    public ResponseEntity<ListResponse<UserDto>> getAllUsers() {
         List<User> users = userService.getAllUsers();
-        return users.stream().map(userMapper::toUserDto).collect(Collectors.toList());
+        List<UserDto> userDtos = users.stream().map(userMapper::toUserDto).collect(Collectors.toList());
+        return ResponseEntity.ok(new ListResponse<>(userDtos));
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long userId) {
+        User user;
+        try {
+            user = userService.getUserById(userId);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(userMapper.toUserDto(user));
     }
 
     @PostMapping("/users")
-    public UserDto saveUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> saveUser(@RequestBody UserDto userDto) {
         User user = userMapper.toUser(userDto);
         userService.save(user);
-        return userMapper.toUserDto(user);
+        return ResponseEntity.ok(userMapper.toUserDto(user));
+    }
+
+    @DeleteMapping("/users/{userId}")
+    public ResponseEntity<UserDto> deleteUserById(@PathVariable Long userId) {
+        User user;
+        try {
+            user = userService.deleteUserById(userId);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(userMapper.toUserDto(user));
     }
 
     @GetMapping("/users/{userId}/contacts")
-    public List<ContactDto> getAllContactsByUserId(@PathVariable Long userId) {
+    public ResponseEntity<ListResponse<ContactDto>> getAllContactsByUserId(@PathVariable Long userId) {
         List<Contact> contacts = contactService.getAllContactsByUserId(userId);
-        return contacts.stream().map(contactMapper::toContactDto).collect(Collectors.toList());
+        List<ContactDto> contactDtos = contacts.stream().map(contactMapper::toContactDto).collect(Collectors.toList());
+        return ResponseEntity.ok(new ListResponse<>(contactDtos));
     }
 }
