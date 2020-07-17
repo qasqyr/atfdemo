@@ -1,9 +1,12 @@
 package kz.atf.atfdemo.dto;
 
+import lombok.Data;
+
+@Data
 public class ContactDto {
-    public Long id;
-    public String phoneNumber;
-    public String type;
-    public Long userId;
-    public Boolean deleted;
+    private Long id;
+    private String phoneNumber;
+    private String type;
+    private Long userId;
+    private Boolean deleted;
 }

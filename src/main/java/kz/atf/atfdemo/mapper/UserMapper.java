@@ -4,7 +4,8 @@ import kz.atf.atfdemo.dto.UserDto;
 import kz.atf.atfdemo.model.User;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+
+@Mapper(componentModel = "spring", uses = {ContactMapper.class})
 public interface UserMapper {
 
     UserDto toUserDto(User user);

@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ContactRepository extends JpaRepository<Contact, Long> {
-    List<Contact> findAllByUserId(Long userId);
+    List<Contact> findAllByUserIdAndDeleted(Long userId, Boolean deleted);
 }

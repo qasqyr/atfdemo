@@ -1,9 +1,11 @@
 package kz.atf.atfdemo.model;
 
+import lombok.Data;
 import org.hibernate.annotations.GeneratorType;
 
 import javax.persistence.*;
 
+@Data
 @Entity
 @Table(name = "contacts")
 public class Contact {
@@ -15,52 +17,12 @@ public class Contact {
     @Column(name = "type")
     @Enumerated(value = EnumType.STRING)
     private Type type;
-    @Column(name = "deleted")
+    @Column(name = "deleted", nullable = false)
     private Boolean deleted = false;
     @ManyToOne
     private User user;
 
     public enum Type {
         MOBILE, WORK, HOME
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

@@ -9,30 +9,26 @@ import kz.atf.atfdemo.model.User;
 import kz.atf.atfdemo.response.ListResponse;
 import kz.atf.atfdemo.service.ContactService;
 import kz.atf.atfdemo.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class UserController {
-    private UserService userService;
-    private UserMapper userMapper;
-    private ContactService contactService;
-    private ContactMapper contactMapper;
-
-    public UserController(UserService userService, UserMapper userMapper, ContactService contactService, ContactMapper contactMapper) {
-        this.userService = userService;
-        this.userMapper = userMapper;
-        this.contactService = contactService;
-        this.contactMapper = contactMapper;
-    }
+    private final UserService userService;
+    private final UserMapper userMapper;
+    private final ContactService contactService;
+    private final ContactMapper contactMapper;
 
     @GetMapping("/users")
-    public ResponseEntity<ListResponse<UserDto>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<ListResponse<UserDto>> getAllUsers(@RequestParam(defaultValue = "false") Boolean deleted) {
+        List<User> users = userService.getAllUsersByDeleted(deleted);
         List<UserDto> userDtos = users.stream().map(userMapper::toUserDto).collect(Collectors.toList());
         return ResponseEntity.ok(new ListResponse<>(userDtos));
     }
@@ -42,7 +38,7 @@ public class UserController {
         User user;
         try {
             user = userService.getUserById(userId);
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(userMapper.toUserDto(user));
@@ -60,15 +56,15 @@ public class UserController {
         User user;
         try {
             user = userService.deleteUserById(userId);
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(userMapper.toUserDto(user));
     }
 
     @GetMapping("/users/{userId}/contacts")
-    public ResponseEntity<ListResponse<ContactDto>> getAllContactsByUserId(@PathVariable Long userId) {
-        List<Contact> contacts = contactService.getAllContactsByUserId(userId);
+    public ResponseEntity<ListResponse<ContactDto>> getAllContactsByUserId(@PathVariable Long userId, @RequestParam(defaultValue = "false") Boolean deleted) {
+        List<Contact> contacts = contactService.getAllContactsByUserIdAndDeleted(userId, deleted);
         List<ContactDto> contactDtos = contacts.stream().map(contactMapper::toContactDto).collect(Collectors.toList());
         return ResponseEntity.ok(new ListResponse<>(contactDtos));
     }
