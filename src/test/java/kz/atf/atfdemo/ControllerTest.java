@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.junit.Assert.*;
 
-public class UserControllerTest extends AbstractTest {
+public class ControllerTest extends AbstractTest {
     @Autowired
     private UserService userService;
     @Autowired
